@@ -2,9 +2,7 @@
 A simple, light-weight contextual menu for links that supports buttons and forms.
 
 ![Bubble with a form](pretty-images/screenshot-form.png)
-
 ![Bubble with a button](pretty-images/screenshot-button.png)
-
 ![Simple bubble with text](pretty-images/screenshot-simple.png)
 
 # How to use
