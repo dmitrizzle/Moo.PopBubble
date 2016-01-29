@@ -1,9 +1,9 @@
 # Moo.PopBubble
 A simple, light-weight contextual menu for links that supports buttons and forms.
 
-![alt tag](https://raw.github.com/dmitrizzle/Moo.PopBubble/readme_update/pretty-images/screenshot-form.png)
-![alt tag](https://raw.github.com/dmitrizzle/Moo.PopBubble/readme_update/pretty-images/screenshot-button.png)
-![alt tag](https://raw.github.com/dmitrizzle/Moo.PopBubble/readme_update/pretty-images/screenshot-simple.png)
+![Bubble with a form](pretty-images/screenshot-form.png)
+![Bubble with a button](pretty-images/screenshot-button.png)
+![Simple bubble with text](pretty-images/screenshot-simple.png)
 
 # How to use
 - Add `<script src="/[your-script-directory]/pop.js"></script>` at the bottom of your page (remember to load MooTools 1.5.2 or higher *before* adding this tag).
