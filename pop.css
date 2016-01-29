@@ -1,0 +1,89 @@
+a, a:visited { color: #1faced; }
+html,body {
+	font-family: Lato, sans-serif;
+}
+
+
+.bubbleWrapper {
+	position: absolute;
+	font-size: .75em;
+	max-width: 300px;
+	background: #1faced;
+	color: #fff;
+	border-radius: 3px;
+	border: none;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	
+	transition: all 250ms;
+	opacity: 0;
+	transform: translateY(-10px);
+}
+.bubbleWrapper.appear {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.bubbleWrapper > p {
+	margin: 0;
+	line-height: 1.5em;
+	padding: 7px 10px 5px 10px;
+	font-weight: 300;
+}
+.bubbleWrapper > a,
+.bubbleWrapper > form button {
+	border: 0;
+	margin: 0;
+	outline: 0;
+	cursor: pointer;
+	font-size: inherit;
+	color: #53585f;
+	background: #afe1ff;
+	box-shadow: 0 0 0 1px #1faced inset, 0 0 7px rgba(0, 0, 0, 0.05);
+	border-radius: 0 0 3px 3px;
+	text-decoration: none;
+	padding: 5px 0;
+	display: block;
+	width: 100%;
+	font-weight: 400;
+	transition: color 250ms;
+}
+.bubbleWrapper > a:hover,
+.bubbleWrapper > form button:hover,
+.bubbleWrapper > form button:focus {
+	background: #53585f;
+	color: #fff;
+}
+.bubbleWrapper > a:active,
+.bubbleWrapper > form button:active {
+	background: #2c2c2c;
+	transform: none;
+}
+
+.bubbleWrapper > form { width: 250px; }
+.bubbleWrapper > form input[type="text"] {
+	outline: 0;
+	padding: 9px 5px;
+	border: 0;
+	margin: 0;
+	width: 240px;
+	background: #1d9fdb;
+	color: #fff;
+}
+
+.bubbleWrapper input::-webkit-input-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+.bubbleWrapper input:-ms-input-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+.bubbleWrapper input:-moz-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+.bubbleWrapper input::input-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.bubbleWrapper > p, .bubbleWrapper > a, .bubbleWrapper > form button, .bubbleWrapper > form input {
+	text-align: center;
+}
