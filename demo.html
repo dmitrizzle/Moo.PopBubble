@@ -11,30 +11,200 @@
 	<!-- using Lato font for the bubble element, you cna replace with another font of your choice if you like -->
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin,latin-ext">
 	<style>
-		.bubbleWrapper > p, .bubbleWrapper > a, .bubbleWrapper > form button, .bubbleWrapper > form input {
+		body, .bubbleWrapper > p, .bubbleWrapper > a, .bubbleWrapper > form button, .bubbleWrapper > form input {
 			font-family: Lato, sans-serif;
 		}
+		body {
+			max-width: 900px;
+			margin: 0 auto;
+		}
+		h2, h1 { text-align: center; }
+		
+		/* it's helpful to hide the forms that you are meaning to show only in popBubble */
+		body > form { display: none; }
+		
+		
+		
+		#bubbleTester {
+			background: #ccc;
+			padding: 1em;
+			cursor: pointer;
+			width: 200px;
+			margin: auto;
+		}
+		
 	</style>
+	
+	
+	<!-- Of course, we'll need MooTools 1.5.2 and popBubble JavaScript libraries: -->
+	<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.5.2/mootools.min.js"></script>
+	<script src="Moo.popBubble.js"></script>
+	
 	
 </head>
 
 <body>
-	<p>Kale chips cred small batch cornhole hoodie, cliche artisan <a href="/moo/" class="popBubble" data-pop-text="Hello!">simple pop</a> etsy art party deep v. Deep v humblebrag ugh selfies tilde cray raw denim banh mi. Fanny pack pop-up fap, waistcoat bitters heirloom offal 90's. Pitchfork flexitarian pinterest, cray ramps helvetica brooklyn fanny pack wolf. Vinyl beard <a href="javascript:alert('You\'ve clicked a button!');" class="popBubble" data-pop-text="This is a button" data-pop-button="Great!">pop with a button</a>, tattooed cardigan cliche kale chips forage VHS trust fund venmo. Trust fund microdosing seitan, vice fashion axe kale chips listicle DIY tattooed heirloom vinyl gentrify. Pickled direct trade poutine cold-pressed, chillwave PBR&B taxidermy jean shorts biodiesel williamsburg try-hard.</p>
 
-	<p>Keffiyeh +1 church-key, salvia beard twee cred paleo brunch YOLO offal selfies affogato austin bespoke. Trust fund artisan meggings, ramps actually pug jean shorts gentrify distillery humblebrag brooklyn. Twee cold-pressed pitchfork crucifix asymmetrical. Post-ironic swag chicharrones mlkshk slow-carb microdosing bushwick, roof party fixie <a href="/pop/" class="popBubble" data-pop-text="Fill out this form:" data-pop-form="myFormId">pop with a form</a> keffiyeh chambray squid gochujang. Tousled humblebrag selfies, lo-fi deep v semiotics franzen fixie scenester twee keytar. Organic cronut kogi, dreamcatcher pickled aesthetic poutine austin fanny pack seitan. Church-key food truck humblebrag distillery DIY squid man bun.</p>
+	<h1>Moo.PopBubble Demo</h1>
+	
+	
+	<h2>The simple, yet powerful method for showing contextual info and user input</h2>
+
+	<!-- 
+		The simplest way to implement is to simply add data-pop-text="your text" attribute to your links.
+		If you do that, you don't need to do anything else, unless you want to make it a button or a form.
+	-->
+	
+	<p>It's easy to add pretty popup dialogues to your links. For example, <a href="/moo/" data-pop-text="Hello!">this link</a> has just one attribute added to it that contains the text "Hello!". The best way to learn is to view-source of this page, everything is explained in the code comments.</p>
+	
+	
+	
+	<!--
+		To add a button, simply add data-pop-button="button label" and it will send users to a link or script in your href attribute.
+	-->
+	
+	<p>You can also preserve the functionality of your links by adding a button to your bubble that would follow through with the original link destination. Could be useful if you have a <a href="https://www.artsocket.com" data-pop-text="Art and photography gallery" data-pop-button="Visit ArtSocket.com">link</a> and you'd like to explain where it'd sent the user before they actually follow through. If your links have JavaScript as an action, it will still <a href="javascript:alert('You\'ve clicked a button!');" data-pop-text="JavaScript link" data-pop-button="Test it">work</a>.</p>
+	
+	
+	
+	<!--
+		If you'd like to use a form, you'll need to add data-pop-form="myFormId" in addition to data-pop-text="your text".
+		The popBubble will then import a form that you have elsewhere in your HTML with an id specified in data-pop-form attribute:
+	-->
 	
 	<form id="myFormId">
-		<input type="text" id="inputId" name="formText" placeholder="Type your text here and press Submit button"></input>
+		<!-- Note that popBubble currently only supports simple forms with a textfield and a button -->
+		<input type="text" name="formText" placeholder="Type your text here and press Submit button"></input>
 		<button type="submit">Submit!</button>
 	</form>
-		
-	<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.5.2/mootools.min.js"></script>
-	<script src="Moo.popBubble.js"></script>
 	
+	<p>But perhaps the most awesome part of popBubble is its support for simple <a href="/pop/" data-pop-text="Fill out this form:" data-pop-form="myFormId">form</a> elements. Just as simple to implement as with the links above, it can give you a tremendous advantage if you'd like your users to send your some quick information while reading the text or within a button - using almost no extra code (popBubble is <em>very</em> light!). Of course, you can have more than one <a href="/pop/" data-pop-text="Fill out another form:" data-pop-form="myOtherFormId">form</a> on the same page.</p>
+	
+	
+	
+	<!-- Of course, you can use more than one form -->
+	<form id="myOtherFormId">
+		<input type="text" name="formText" placeholder="Type your other text here and press the button"></input>
+		<button type="submit">Submit Another!</button>
+	</form>
+	
+	
+	
+	<h2>All the power to you: customize the look, events, offset; have multiple bubbles assigned to a single element, depending on your set parameters</h2>
+	
+	
+	<!--
+		If you would like more control over your notifications, you can use popBubble class
+	-->
+	
+	<div id="bubbleTester">Click to test a popBubble class</div> <!-- An HTML object you can assign your bubbles to -->
+	
+	<!--
+		Below anchors simply switch popBubble objects to be initiated on click above,
+		could as easily be done in any way you choose within your JavaScript.
+	-->
+	<p id="bubbleSwitcher">Switch the above to show: <a href="simpleClass" id="simpleClass" style="font-weight: 700">simple pop with a different color</a>, <a href="buttonClass" id="buttonClass">pop with a button that has a different offset</a>, <a href="formClass" id="formClass">pop with a form & extra CSS styles</a>.
+	
+	<!-- A form element for your popBubble class -->
+	<form id="myClassFormId">
+		<input type="text" name="formText" placeholder="Type your yet other text here and press the button"></input>
+		<button type="submit">That much!</button>
+	</form>
+	
+	
+	
+	<!-- Now to create our classes (don't worry, it's easy :) -->
 	<script>
 	
-		// DISPLAY FORM SUBMISSION RESULT:
+	// An object with a style declaration for a different 'background-color' on popBubble:
+	var simpleColorPop = new popBubble({ styles: {'background-color': 'rgba(237, 95, 137, 0.95)'} });
+	
+	// An object which can have a different offset position
+	var buttonOffsetPop = new popBubble({
+		offset: {x: -100, y: -200},
+		button: 'Yes it is!' // you can set the button text in an object as well
+	});
+	
+	// An form object which can have any CSS styling elements
+	var trickedOutPop = new popBubble({
+		form: 'myClassFormId',
+		styles: {
+			'background': 'rgba(123, 73, 119, 0.96)',
+			'transform': 'scale(1.5) rotate(25deg)'
+		}
+	});
+
+	
+	$('bubbleTester').addEvent('click', function(){
+		// ^^ click event for bubbleTester element that will bring up:
 		
+																						// just switching types available on click
+																						if(displayBubbleType == 'simpleColorPop')
+		
+		// pop init for 'simpleColorPop' object from above:
+		simpleColorPop.pop(
+			// object which will determine the position for the bubble:
+			$('bubbleTester'),
+			// popBubble text to be displayed:
+			'<strong>HTML is allowed...</strong><br />...in button text. But the bubble styles are controlled individually via constructor.'
+		);
+		
+		
+																						if(displayBubbleType == 'buttonOffsetPop')
+		
+		// pop init for 'buttonOffsetPop' object from above:
+		buttonOffsetPop.pop($('bubbleTester'), '<strong>A different offset position is easy</strong>');
+		
+		
+																						if(displayBubbleType == 'trickedOutPop')
+		
+		// pop init for 'buttonOffsetPop' object from above:
+		trickedOutPop.pop($('bubbleTester'), '<strong>How cray is this form?</strong>');
+		
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// this is to simply switch which popBubble object would be called above:
+	var displayBubbleType = 'simpleColorPop';
+	$('simpleClass').addEvent('click', function(e){
+		e.stop();
+		displayBubbleType = 'simpleColorPop';
+		$$('#bubbleSwitcher a').setStyle('font-weight',400);
+		this.setStyle('font-weight',700); 
+	});
+	$('buttonClass').addEvent('click', function(e){
+		e.stop();
+		displayBubbleType = 'buttonOffsetPop';
+		$$('#bubbleSwitcher a').setStyle('font-weight',400);
+		this.setStyle('font-weight',700); 
+	});
+	$('formClass').addEvent('click', function(e){
+		e.stop();
+		displayBubbleType = 'trickedOutPop';
+		$$('#bubbleSwitcher a').setStyle('font-weight',400);
+		this.setStyle('font-weight',700); 
+	});
+		
+	
+	</script>
+	
+	
+	
+	
+	
+	
+	
+	<!-- You do not need to include anything from this script below. It's here to demonstrate form output -->
+	<script>		
 		// create element with form text and inject
 		if(getUrlVars()['formText']){
 			new Element('p', {
@@ -54,5 +224,7 @@
 			return vars;
 		}
 	</script>
+	<!-- Thanks :) -->
+	
 </body>
 </html>

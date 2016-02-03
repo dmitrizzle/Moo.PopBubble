@@ -6,39 +6,48 @@
 /*															*/
 /*----------------------------------------------------------*/
 
+var popBubble = new Class({
 
-var popBubble = {
-	
 	// OPTIONS:
+	Implements: Options,
 	options: {
-		offset: { x: 10, y: 20 } // offset coordinates for the bubbles
+		offset: { x: 10, y: 20 }, 		// offset coordinates for the bubbles
+		styles: {},						// custom CSS rules for pop bubble
+		text: false,					// text to appear in pop bubble
+		button: false,				// button text to appear in pop bubble
+		action: false,					// action URL for form or button
+		form: false						// form ID to be implemented in popBubble
+		
 	},
 
 	// DRAW THE BUBBLE:
-	pop: function(el){
+	pop: function(el, text){
 	
 		// text to be shown in the bubble:
-		var text = el.get('data-pop-text') || 'Empty';
-		var button = el.get('data-pop-button') || false;
-		var action = el.get('href') || false;
-		var form = el.get('data-pop-form') || false;
+		var text = text || el.get('data-pop-text') || this.options.text || 'Empty';
+		var button = this.options.button || el.get('data-pop-button') || false;
+		var action = this.options.action || el.get('href') || false;
+		var form = this.options.form || el.get('data-pop-form') || false;
 		
 		// position of the bubble:
 		var pos = el.getPosition();
 		
+		// generate CSS styles for the pop bubble:
+		var bubbleStyles = {
+			'top': pos.y + this.options.offset.y,
+			'left': pos.x + this.options.offset.x,
+		}
+		Object.append(bubbleStyles, this.options.styles);
 		
 		// create HTML element for the bubble:
 		var bubbleWrapper = new Element('div', {
 			'class': 'bubbleWrapper',
 			'html':	'<p>'+ text +'</p>',
-			'styles': {
-				'top': pos.y + popBubble.options.offset.y,
-				'left': pos.x + popBubble.options.offset.x,
-			}
+			'styles': bubbleStyles
 		});
 		
 		// add bubble element to document:
-		popBubble.kill(true);
+		this.kill(true);
 		bubbleWrapper.inject(document.body, 'bottom');
 		(function(){ bubbleWrapper.addClass('appear'); }).delay(1);
 		
@@ -60,48 +69,52 @@ var popBubble = {
 		// it will import a form with the same-named ID in the HTML.
 		// CURRENTLY ONLY SUPPORTING FORMS WITH SINGLE TEXT-INPUT ELEMENT.
 		if(form){
-		
+			
+			// if form is defined in options, not data-... attribute, go through devouring it:
+			if(this.options.form && $(form)){
+				$(form).rememberForm();
+			}
+			
+			
 			// copy html from memory:
 			var bubbleForm = new Element('form', {
-				'html': popBubble.rememberForm[form].html,
+				'html': window.popBubbleFormObjects[form].html,
+				'events': window.popBubbleFormObjects[form].events
 			});
 			
 			// add the form to the bubble:
 			bubbleForm.inject(bubbleWrapper, 'bottom');
 			
-			
-			
-			
 			// copy all attributes from memory:
-			for (i = 0; i < popBubble.rememberForm[form].attributes.length; i++){
-				var a = popBubble.rememberForm[form].attributes[i];
+			for (i = 0; i < window.popBubbleFormObjects[form].attributes.length; i++){
+				var a = window.popBubbleFormObjects[form].attributes[i];
 				bubbleForm.set(a.name, a.value);
 			}
 			
-			 
+			
+			
+			// stop form from input fields from closing pop bubble:
 			$$('#' + form + ' input').addEvent('click', function(e){
 				e.stop();
 			});
-			$$('#' + form + ' input')[0].focus();
 			
-			
-			
-			
+			// focus on form textfield:
+			if($$('#' + form + ' input[type="text"]'))
+				$$('#' + form + ' input[type="text"]')[0].focus();
 			
 		}
 		
 		
 		
 		// kill bubble if clicked outside:
-		window.addEvent('click', function(e){
-			popBubble.kill();
+		var self = this;
+		window.addEvent('click', function(){
+			self.kill();
 		});
 		
 	},
 	
-	// KEEP ALL THE FORM ELEMENTS HERE:
-	rememberForm: {},
-	
+
 	// KILL THE BUBBLE(S):
 	kill: function(others){
 		if($$('.bubbleWrapper')[0] && $$('.bubbleWrapper')[0].hasClass('appear')){
@@ -116,42 +129,57 @@ var popBubble = {
 	
 	
 	// ADD BUBBLE FUNCTION TO ALL MARKED ELEMENTS:
-	init: function(){
-		
-		// implement rememberForm function for HTML objects
-		// it will push all necessary form data to popBubble.rememberForm object:
-		Element.implement({
-			rememberForm: function(){
-				formId = this.get('id');
-				rememberForm = {
-					[formId]: {
-						'attributes': this.attributes,
-						'html': this.get('html')
-					}
-				}
-				Object.append(popBubble.rememberForm, rememberForm);				
-			}
-		});
-		
+	scan: function(){
+		var self = this;
 		
 		// scan text for .popBubble classes and add events:
-		$$('.popBubble').each(function(el, i){
+		$$('[data-pop-text]').each(function(el, i){
 			el.addEvent('click', function(e){
 				e.stop();
-				popBubble.pop(this);
+				self.pop(el);
 			});
 			
 			// remember all form elements and clear them from HTML:
 			if(el.get('data-pop-form')){
 				$(el.get('data-pop-form')).rememberForm();
-				$(el.get('data-pop-form')).destroy();
 			}
 		});
 		
 		
-	}
-};
+	},
+	
+	initialize: function(options){
+		this.setOptions(options);
+		var self = this;
+	
+		// implement rememberForm function for HTML objects
+		// it will push all necessary form data to popBubble.rememberForm object:
+		if (typeof Element.rememberForm != 'function') Element.implement({
+			rememberForm: function(){
+			
+				// gather form element properties:
+				formId = this.get('id');				
+				rememberForm = {
+					[formId]: {
+						'attributes': this.attributes,
+						'html': this.get('html'),
+						'events': this.retrieve('events'),
+					}
+				}
+				
+				// store them and destroy the original:
+				if(window.popBubbleFormObjects){
+					Object.append(window.popBubbleFormObjects, rememberForm);
+				}else{
+					window.popBubbleFormObjects = rememberForm;
+				}		
+				this.destroy();
+			}
+		});
+		
+	},
+	
+});
 
-
-// INITIALIZE THE POP BUBBLE:
-popBubble.init();
+// scan HTML for popBubble cues
+window.addEvent('domready', function(){ new popBubble().scan(); });
