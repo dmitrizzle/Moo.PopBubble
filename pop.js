@@ -82,6 +82,7 @@ var popBubble = {
 			$$('#' + form + ' input').addEvent('click', function(e){
 				e.stop();
 			});
+			$$('#' + form + ' input')[0].focus();
 			
 			
 			
