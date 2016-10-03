@@ -1,0 +1,97 @@
+.bubbleWrapper {
+	position: absolute;
+	font-size: .75em;
+	max-width: 340px;
+	background: rgba(31, 172, 237, 0.95);
+	color: #fff;
+	border-radius: 3px;
+	border: none;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	
+	transition: all 250ms;
+	opacity: 0;
+	transform: translateY(-10px);
+	cursor: pointer;
+	
+	z-index: 1;
+}
+.bubbleWrapper.appear {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.bubbleWrapper > p {
+	margin: 0;
+	line-height: 1.5em;
+	padding: 7px 10px 5px 10px;
+	font-weight: 300;
+}
+.bubbleWrapper > p a {
+	color: #fff;
+	font-weight: 700;
+	text-decoration: underline;
+}
+
+.bubbleWrapper > a,
+.bubbleWrapper > form button {
+	border: 0;
+	margin: 0;
+	outline: 0;
+	cursor: pointer;
+	font-size: inherit;
+	color: #53585f;
+	background: rgba(255, 255, 255, .64);
+	border-radius: 0 0 3px 3px;
+	text-decoration: none;
+	text-align: center;
+	padding: 5px 0;
+	display: block;
+	width: 100%;
+	font-weight: 400;
+	transition: color 250ms;
+}
+.bubbleWrapper > a:hover,
+.bubbleWrapper > form button:hover,
+.bubbleWrapper > form button:focus {
+	background: #53585f;
+	color: #fff;
+}
+.bubbleWrapper > a:active,
+.bubbleWrapper > form button:active {
+	background: #2c2c2c;
+	transform: none;
+}
+
+.bubbleWrapper > form { width: 250px; }
+.bubbleWrapper > form input[type="text"] {
+	outline: 0;
+	padding: 9px 5px;
+	border: 0;
+	margin: 0;
+	width: 250px;
+	background-color: rgba(44, 44, 44, .1);
+	color: #fff;
+}
+
+.bubbleWrapper input::-webkit-input-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+.bubbleWrapper input:-ms-input-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+.bubbleWrapper input:-moz-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+.bubbleWrapper input::input-placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.bubbleWrapper strong {
+	text-align: center;
+	font-weight: 400;
+	text-transform: uppercase;
+	width: 100%;
+	display: inline-block;
+	padding-bottom: 2px;
+}
