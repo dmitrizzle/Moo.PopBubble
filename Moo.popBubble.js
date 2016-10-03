@@ -160,7 +160,7 @@ var popBubble = new Class({
 				// gather form element properties:
 				formId = this.get('id');				
 				rememberForm = {
-					[formId]: {
+					formId: {
 						'attributes': this.attributes,
 						'html': this.get('html'),
 						'events': this.retrieve('events'),
